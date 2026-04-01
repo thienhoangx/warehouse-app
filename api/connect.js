@@ -1,9 +1,15 @@
 import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGO_URI;
-const client = new MongoClient(uri);
+
+let client;
+let db;
 
 export async function connectDB() {
-  await client.connect();
-  return client.db("warehouse");
+  if (!client) {
+    client = new MongoClient(uri);
+    await client.connect();
+    db = client.db("warehouse");
+  }
+  return db;
 }
